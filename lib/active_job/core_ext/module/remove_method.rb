@@ -19,7 +19,12 @@ class Module
     visibility = method_visibility(method)
     remove_possible_method(method)
     define_method(method, &block)
-    send(visibility, method)
+
+    # The following line doesn't work as expected when overriding private methods as public
+    # Example: Define a rails scope named #public, which is also a private method on every ruby class.
+    # This will override #public (which is a private method), making the new method private again,
+    # but we don't want that, since scopes should be public
+    # send(visibility, method)
   end
 
   def method_visibility(method) # :nodoc:
